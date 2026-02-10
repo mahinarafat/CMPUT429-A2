@@ -78,6 +78,13 @@ Prediction accuracy:
 | Backward  | 2,400,275 | 556,458 |
 
 
+| Mispredicted | Taken | Not Taken |
+|-----------|-------|-----------|
+| Forward   | 42,050 | 73,457 |
+| Backward  | 8,835 | 8,749 |
+
+
+
 (Report the frequencies of your branch prediction stats of the Cartesian product (forward, backward) x (taken, not taken) 
 
 2. **(1 point)** Why is the total number of predicted branches here higher than the number of committed branches?  
