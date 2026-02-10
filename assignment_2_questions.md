@@ -72,8 +72,11 @@ Prediction accuracy:
 
 1. **(3 points)** Express your numbers in 8 tables (2 benchmarks x 2 predictors x 2 tables) of the following type:
 
-|  Total Taken Not Taken Forward 4244722 10438966 Backward 2400275 556458  |  Mispred Taken Not Taken Forward 42050 73457 Backward 8835 8749  |
-| :---- | :---- |
+| Total | Taken | Not Taken |
+|-----------|-------|-----------|
+| Forward   | 4,244,722 | 10,438,966 |
+| Backward  | 2,400,275 | 556,458 |
+
 
 (Report the frequencies of your branch prediction stats of the Cartesian product (forward, backward) x (taken, not taken) 
 
