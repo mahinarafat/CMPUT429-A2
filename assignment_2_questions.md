@@ -77,15 +77,63 @@ Prediction accuracy:
 | Forward   | 4,244,722 | 10,438,966 |
 | Backward  | 2,400,275 | 556,458 |
 
-
 | Mispredicted | Taken | Not Taken |
 |-----------|-------|-----------|
 | Forward   | 42,050 | 73,457 |
 | Backward  | 8,835 | 8,749 |
 
 
-
 (Report the frequencies of your branch prediction stats of the Cartesian product (forward, backward) x (taken, not taken) 
+
+For LBM + LocalBP
+| Total | Taken | Not Taken |
+|-----------|-------|-----------|
+| Forward   | 5149 | 16045 |
+| Backward  |  557034 | 2437 |
+
+| Mispredicted | Taken | Not Taken |
+|-----------|-------|-----------|
+| Forward   | 940 | 463 |
+| Backward  | 72 | 162 |
+
+-------------------------------------------------------------------------
+For LBM + BiModeBP
+| Total | Taken | Not Taken |
+|-----------|-------|-----------|
+| Forward   | 4148 | 17249 |
+| Backward  |  556751 | 2758 |
+
+| Mispredicted | Taken | Not Taken |
+|-----------|-------|-----------|
+| Forward   | 18 | 650 |
+| Backward  | 6 | 418 |
+
+-------------------------------------------------------------------------
+
+For MCF + LocalBP
+| Total | Taken | Not Taken |
+|-----------|-------|-----------|
+| Forward   | 5021280 | 10975324 |
+| Backward  |  3866142 | 538945 |
+
+| Mispredicted | Taken | Not Taken |
+|-----------|-------|-----------|
+| Forward   | 312594 | 708351 |
+| Backward  | 91281 | 94122 |
+
+-------------------------------------------------------------------------
+
+For MCF + BiModeBP
+| Total | Taken | Not Taken |
+|-----------|-------|-----------|
+| Forward   | 5300174 | 10755516 |
+| Backward  |  3739711 | 531035 |
+
+| Mispredicted | Taken | Not Taken |
+|-----------|-------|-----------|
+| Forward   | 172477 | 217518 |
+| Backward  | 72708 | 14604 |
+
 
 2. **(1 point)** Why is the total number of predicted branches here higher than the number of committed branches?  
      
