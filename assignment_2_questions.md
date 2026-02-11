@@ -50,12 +50,12 @@ Question 1\. **(3 Points)** Implement the following 8 statistics for **Direct Br
 
 1. **(1 point)** List the function which calls `updateExeInstStats()` in `iew.cc`.  
 
-	  
+	  executeInsts()
 	
 
 2. **(2 points)** The IEW can receive squashed instructions, which should not be counted in the stats in the `updateExeInstStats()` function. How is this handled in the code? Provide a brief description.
 
- 
+	 It is marked executed and CanCommit, and the numSquashedInsts is incremented. The code then runs continue which goes to next iteration without running updateExeInstStats(inst) which means the instruction is 	 not executed. 
 
 Question 2\. **(8 points)** For each benchmark below, run the SiFiveP550 config with `10^8` instructions with the `LocalBP()` and the `BiModeBP()` branch prediction strategies separately.   
 You will be running 2 different SPEC benchmarks: ([https://www.spec.org/cpu2017/Docs](https://www.spec.org/cpu2017/Docs))
