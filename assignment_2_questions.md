@@ -137,23 +137,33 @@ For MCF + BiModeBP
 
 2. **(1 point)** Why is the total number of predicted branches here higher than the number of committed branches?  
      
-     
+     Predictions are made for some branches that are later squashed and not committed.
      
 3. **(2 points)** Report the misprediction rates for the total forwards and the total backwards both branch prediction strategies.   
+     For LBM + LocalBP => Forward -> (940 + 463)/(5149 + 16045) = 0.0662 ~ 6.62% 
+   						  Backward-> (72 + 162)/(557034 + 2437) = 0.000418 ~ 0.042%
+     For LBM + BiModeBP =>Forward -> (18 + 650)/(4148 + 17249) = 0.0312 ~ 3.12%
+   						  Backward-> (6 + 418)/(556751 + 2758) = 0.000758 ~ 0.076%
+     For MCF + LocalBP => Forward -> (312594 + 708351)/(5021280 + 10975324) = 0.0638 ~ 6.38%
+   						  Backward-> (91281 + 94122)/(3866142 + 538945) = 0.0421 ~ 4.21%
+     For MCF + BiModeBP =>Forward -> (172477 + 217518)/(5300174 + 10755516) = 0.0243 ~ 2.43%
+   						  Backward-> (72708 + 14604)/(3739711 + 531035) = 0.0204 ~ 2.04%
+   
      
      
-     
-4. **(2 points)** When considering the accuracy of predicting **forward and backward** branches separately, can you claim that one type was predicted better than the other? What about **predicted taken and not taken**? Can you conclusively conclude whether forwards or backwards branches are better predicted? Provide a hypothesis to explain your results.  
+5. **(2 points)** When considering the accuracy of predicting **forward and backward** branches separately, can you claim that one type was predicted better than the other? What about **predicted taken and not taken**? Can you conclusively conclude whether forwards or backwards branches are better predicted? Provide a hypothesis to explain your results.  
    * In particular, discuss whether or not your results support the idea that backward branches are taken more regularly than forward branches.
-
+	
+	Backward branches were predicted better than the forwards branches in all cases. From the table we can notice that backward branches are mostly taken, this is because backward branches are usually for/while 		loops which are mostly taken whereas the forward branches are more unpredictable.  
 	  
 Question 3\. **(3 points)** How often are branches committed in the provided benchmarks? 
 
 1. **(1 points)** Provide the percentage of branches relative to the total number of instructions committed. (This is a built in stat in the commit stage)  
-     
+
+	562,027/100,000,001 = 0.562%
 2. **(2 points)** Does this vary between branch predictors? (Ignore extremely small differences due to simulation artifacts.
 
-# 
+	No — the percentage of branches committed does not really vary between branch predictors. 
 
 # Section 2 (13 points) (branch predictor)
 
@@ -162,16 +172,16 @@ Question 1\. **(7 points)** Gem5  branch predictor questions:
 1. **(1 point)** Consider the bimodal predictor scheme you have discussed in class. Provide the name of an existing predictor in Gem5 whose implementation most closely/exactly implements this scheme. 
 
 	  
-	  
+	  2bit_local
 	
 
 2. **(1 point)** The Gem5 branch predictor API passes around branch prediction history with a (C) struct. Look at `bi_mode.cc`’s `BPHistory` struct, what is the only parameter you would need to implement a GShare branch predictor yourself?  
      
-     
+     globalHistoryReg
      
 3. **(1 point)** Modern processors typically stick with phts with a power of two number of entries. However, if we really wanted a pht with `x` entries where `x` is not a power of two, this can be achieved by calculating the key, and taking it modulo `x`. Describe a potential problem with indexing a pht with non-power of two number of entries using the method in question f?  
      
-     
+     Using modulo with a non-power of two PHT can lead to uneven distribution of branch mapping and increased aliasing, potentially reducing accuracy.
      
 4. **(1 point)** Let `i` be the number of local counter bits you have. Let `x` (i.e. `010`) be a saturating counter (think of this as an integer). Write a simple `C` expression that returns the prediction of the sat counter. (1 for taken, 0 for not taken)  
    [https://en.cppreference.com/w/c/language/operator\_arithmetic.html](https://en.cppreference.com/w/c/language/operator_arithmetic.html)  
