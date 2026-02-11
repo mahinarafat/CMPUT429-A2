@@ -50,12 +50,12 @@ Question 1\. **(3 Points)** Implement the following 8 statistics for **Direct Br
 
 1. **(1 point)** List the function which calls `updateExeInstStats()` in `iew.cc`.  
 
-	  executeInsts()
+	ANS:  executeInsts()
 	
 
 2. **(2 points)** The IEW can receive squashed instructions, which should not be counted in the stats in the `updateExeInstStats()` function. How is this handled in the code? Provide a brief description.
 
-	 It is marked executed and CanCommit, and the numSquashedInsts is incremented. The code then runs continue which goes to next iteration without running updateExeInstStats(inst) which means the instruction is 	 not executed. 
+	 ANS: It is marked executed and CanCommit, and the numSquashedInsts is incremented. The code then runs continue which goes to next iteration without running updateExeInstStats(inst) which means the 			 		  instruction is not executed. 
 
 Question 2\. **(8 points)** For each benchmark below, run the SiFiveP550 config with `10^8` instructions with the `LocalBP()` and the `BiModeBP()` branch prediction strategies separately.   
 You will be running 2 different SPEC benchmarks: ([https://www.spec.org/cpu2017/Docs](https://www.spec.org/cpu2017/Docs))
@@ -84,6 +84,8 @@ Prediction accuracy:
 
 
 (Report the frequencies of your branch prediction stats of the Cartesian product (forward, backward) x (taken, not taken) 
+
+ANS:
 
 For LBM + LocalBP
 | Total | Taken | Not Taken |
@@ -137,10 +139,12 @@ For MCF + BiModeBP
 
 2. **(1 point)** Why is the total number of predicted branches here higher than the number of committed branches?  
      
-     Predictions are made for some branches that are later squashed and not committed.
+     ANS: Predictions are made for some branches that are later squashed and not committed.
      
 3. **(2 points)** Report the misprediction rates for the total forwards and the total backwards both branch prediction strategies.   
-     For LBM + LocalBP => Forward -> (940 + 463)/(5149 + 16045) = 0.0662 ~ 6.62% 
+
+	ANS:
+   	 For LBM + LocalBP => Forward -> (940 + 463)/(5149 + 16045) = 0.0662 ~ 6.62% 
    						  Backward-> (72 + 162)/(557034 + 2437) = 0.000418 ~ 0.042%
      For LBM + BiModeBP =>Forward -> (18 + 650)/(4148 + 17249) = 0.0312 ~ 3.12%
    						  Backward-> (6 + 418)/(556751 + 2758) = 0.000758 ~ 0.076%
@@ -151,19 +155,19 @@ For MCF + BiModeBP
    
      
      
-5. **(2 points)** When considering the accuracy of predicting **forward and backward** branches separately, can you claim that one type was predicted better than the other? What about **predicted taken and not taken**? Can you conclusively conclude whether forwards or backwards branches are better predicted? Provide a hypothesis to explain your results.  
+4. **(2 points)** When considering the accuracy of predicting **forward and backward** branches separately, can you claim that one type was predicted better than the other? What about **predicted taken and not taken**? Can you conclusively conclude whether forwards or backwards branches are better predicted? Provide a hypothesis to explain your results.  
    * In particular, discuss whether or not your results support the idea that backward branches are taken more regularly than forward branches.
 	
-	Backward branches were predicted better than the forwards branches in all cases. From the table we can notice that backward branches are mostly taken, this is because backward branches are usually for/while 		loops which are mostly taken whereas the forward branches are more unpredictable.  
+	ANS: Backward branches were predicted better than the forwards branches in all cases. From the table we can notice that backward branches are mostly taken, this is because backward branches are usually 				 for/while loops which are mostly taken whereas the forward branches are more unpredictable.  
 	  
 Question 3\. **(3 points)** How often are branches committed in the provided benchmarks? 
 
 1. **(1 points)** Provide the percentage of branches relative to the total number of instructions committed. (This is a built in stat in the commit stage)  
 
-	562,027/100,000,001 = 0.562%
+	ANS: 562,027/100,000,001 = 0.562%
 2. **(2 points)** Does this vary between branch predictors? (Ignore extremely small differences due to simulation artifacts.
 
-	No, the percentage of branches committed does not vary between branch predictors. 
+	ANS: No, the percentage of branches committed does not vary between branch predictors. 
 
 # Section 2 (13 points) (branch predictor)
 
@@ -172,37 +176,37 @@ Question 1\. **(7 points)** Gem5  branch predictor questions:
 1. **(1 point)** Consider the bimodal predictor scheme you have discussed in class. Provide the name of an existing predictor in Gem5 whose implementation most closely/exactly implements this scheme. 
 
 	  
-	  2bit_local
+	  ANS: 2bit_local
 	
 
 2. **(1 point)** The Gem5 branch predictor API passes around branch prediction history with a (C) struct. Look at `bi_mode.cc`’s `BPHistory` struct, what is the only parameter you would need to implement a GShare branch predictor yourself?  
      
-     globalHistoryReg
+     ANS: globalHistoryReg
      
 3. **(1 point)** Modern processors typically stick with phts with a power of two number of entries. However, if we really wanted a pht with `x` entries where `x` is not a power of two, this can be achieved by calculating the key, and taking it modulo `x`. Describe a potential problem with indexing a pht with non-power of two number of entries using the method in question f?  
      
-     Using modulo with a non-power of two PHT can lead to uneven distribution of branch mapping and increased aliasing, potentially reducing accuracy.
+     ANS: Using modulo with a non-power of two PHT can lead to uneven distribution of branch mapping and increased aliasing, potentially reducing accuracy.
      
 4. **(1 point)** Let `i` be the number of local counter bits you have. Let `x` (i.e. `010`) be a saturating counter (think of this as an integer). Write a simple `C` expression that returns the prediction of the sat counter. (1 for taken, 0 for not taken)  
    [https://en.cppreference.com/w/c/language/operator\_arithmetic.html](https://en.cppreference.com/w/c/language/operator_arithmetic.html)  
      
-     (x >= (1 << (i - 1)))
+     ANS: (x >= (1 << (i - 1)))
      
 5. **(1 point)** Let `2^n` be the number of pht entries. Let PC be the address of the branch. Write a simple C expression(s) that returns the correct number of lower order bits of the PC.   
      
- 	 PC & ((1 << n) - 1)
+ 	 ANS: PC & ((1 << n) - 1)
 
 6. **(1 point)** Let h be the global history, which is `k` bits long. Let `b` be the `n` lower order bits of the PC. Assume `k` is at most `n`. The GShare predictor XOR’s the global history with the upper order bits of `b` to obtain the pht index. Write a simple C expression that calculates the PHT index using `h`, `b`, `n`, and `k`.  
 
-	 ((( (b >> (n - k)) ^ h ) << (n - k)) | (b & ((1 << (n - k)) - 1)))
+	 ANS: ((( (b >> (n - k)) ^ h ) << (n - k)) | (b & ((1 << (n - k)) - 1)))
 
 7. **(1 point)** Suppose the number of pht entries, `x`, is less than `2^n` and `x` is not a power of two.  Given an index value `i` calculated based on `n` as in the previous question, write an expression that maps all possible values of `i` to the range `[0, x)`.  
      
- 	 i % x
+ 	 ANS: i % x
 
 8. **(2 point)** How do you calculate the number of index bits given the number of PHT entries? (The answer should be a common mathematical function.) How does this limit the number of entries a PHT can have?
 
-	 Since hardware indexing uses binary address bits, this limits PHT sizes to powers of two. Therefore, number of index bits required for a PHT with N entries is ⌈log₂(N)⌉.
+	 ANS: Since hardware indexing uses binary address bits, this limits PHT sizes to powers of two. Therefore, number of index bits required for a PHT with N entries is ⌈log₂(N)⌉.
 	
 9. **(1 point)** Read the source files for the built in satCounter class in gem5. Does it implement the saturating counter state diagram discussed in class? If not, what is the scheme it follows?
 
@@ -244,14 +248,14 @@ Question 1: **(3 points)** When the GShare branch predictor was created**[^1]**,
 
 1. Explain why the GShare performs better than the GSelect? (Note you may have to consult the paper.)  
 
-   The XOR of PC and GR provides more even distribution for the PHT whereas when concatenated in GSelect, it may lead to same entry for different branch pattern causing higher conflict aliasing, poor prediction
-   and waste of storage.
+   ANS: The XOR of PC and GR provides more even distribution for the PHT whereas when concatenated in GSelect, it may lead to same entry for different branch pattern causing higher conflict aliasing, poor 				prediction and waste of storage.
 
 Question 2: **(4 points)**  
 The original paper proposing the GShare Branch predictor scheme also specifies that you can vary the amount of global history bits used. In the case that the number of global history bits is less than the number of index bits, the entire PHT is always indexed by the amount of index bits from the lower branch address, and the global history is XORed with the upper bits of the local index bits.
 
 1. **(1 point)** Consider a branch with a taken/not taken pattern 0110011001100…, where 1 indicates taken, and 0 indicates not taken. Using the state transitions discussed in class, write out the states for a 2 bit saturating counter with an initial state of weak taken (10), when it encounters this pattern. What is the steady misprediction rate?
 
+ANS:
 | T/NT | 0 | 1 | 1 | 0 | 0 | 1 | 1 | 0 | 0 | 1 | 1 | 0 | 0 | ... |
 |------|---|---|---|---|---|---|---|---|---|---|---|---|---|-----|
 | State|10 |00 |01 |11 |10 |00 |01 |11 |10 |00 |01 |11 |10 |00  |
@@ -262,6 +266,7 @@ Therefore it has 100% misprediction rate
 
 2. **(1 point)** Consider the same taken/not taken pattern as the previous question. Give the states a saturating counter using Gem5’s implementation would go through, and provide the steady misprediction rate. Assume the counter starts in the weak taken state (10) as before.
 
+ANS:
 | T/NT | 0 | 1 | 1 | 0 | 0 | 1 | 1 | 0 | 0 | 1 | 1 | 0 | 0 | ... |
 |------|---|---|---|---|---|---|---|---|---|---|---|---|---|-----|
 | State|10 |01 |10 |11 |10 |01 |10 |11 |10 |01 |10 |11 |10 |01  |
@@ -272,7 +277,7 @@ Therefore it has 75% misprediction rate
 
 3. **(2 points)** Find a taken/not taken pattern that would result in a 100% steady misprediction rate on the Gem5 implementation and  a 50% steady misprediction rate on the version discussed in class. Once again, assume both predictors start in the weak taken (10) state.
 
-	 01010101
+	 ANS: 01010101
    
 Question 3 **(3 points)**:  
  A (3,2) correlator predictor is a correlator predictor that has a global register with three bits and in which each entry of the PHT has two bits. For a (3,2) correlated prediction scheme that has a global history register and one pattern history table, show the contents of the history register and the PHT after the following sequence of branch executions have taken place:
@@ -290,7 +295,7 @@ Assume that:
 * The addresses of the nine branch instructions are: ffff0000, ffff0001, ffff0010, ffff0000, ffff0000, ffff0000, ffff0011, ffff0010, ffff0000... but do you need this information?  
 * The PHT should be shown as updated after the execution of the last branch.
 
-  	Global History Register = 011
+  	ANS: Global History Register = 011
   
   	Final PHT:
 
