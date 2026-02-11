@@ -193,16 +193,20 @@ Question 1\. **(7 points)** Gem5  branch predictor questions:
  	 PC & ((1 << n) - 1)
 
 6. **(1 point)** Let h be the global history, which is `k` bits long. Let `b` be the `n` lower order bits of the PC. Assume `k` is at most `n`. The GShare predictor XOR’s the global history with the upper order bits of `b` to obtain the pht index. Write a simple C expression that calculates the PHT index using `h`, `b`, `n`, and `k`.  
-   
+
+	 ((( (b >> (n - k)) ^ h ) << (n - k)) | (b & ((1 << (n - k)) - 1)))
 
 7. **(1 point)** Suppose the number of pht entries, `x`, is less than `2^n` and `x` is not a power of two.  Given an index value `i` calculated based on `n` as in the previous question, write an expression that maps all possible values of `i` to the range `[0, x)`.  
      
- 
-
+ 	 i % x
 
 8. **(2 point)** How do you calculate the number of index bits given the number of PHT entries? (The answer should be a common mathematical function.) How does this limit the number of entries a PHT can have?
 
+	 Since hardware indexing uses binary address bits, this limits PHT sizes to powers of two. Therefore, number of index bits required for a PHT with N entries is ⌈log₂(N)⌉.
+	
 9. **(1 point)** Read the source files for the built in satCounter class in gem5. Does it implement the saturating counter state diagram discussed in class? If not, what is the scheme it follows?
+
+	
 
 10. Bonus: **(2 points)** The ChampSim simulator is another trace based CPU simulator. In its GShare branch predictor implementation, they fold the entire PC into their index. We will not be doing this, but   
       
@@ -239,25 +243,35 @@ Question 2\. **(3 points)** Create the tables for your `GShareBP()` implementati
 Question 1: **(3 points)** When the GShare branch predictor was created**[^1]**, it was introduced along with a sister algorithm, GSelect, which \<describe implementation\>
 
 1. Explain why the GShare performs better than the GSelect? (Note you may have to consult the paper.)  
-   
+
+   The XOR of PC and GR provides more even distribution for the PHT whereas when concatenated in GSelect, it may lead to same entry for different branch pattern causing higher conflict aliasing, poor prediction
+   and waste of storage.
 
 Question 2: **(4 points)**  
 The original paper proposing the GShare Branch predictor scheme also specifies that you can vary the amount of global history bits used. In the case that the number of global history bits is less than the number of index bits, the entire PHT is always indexed by the amount of index bits from the lower branch address, and the global history is XORed with the upper bits of the local index bits.
 
 1. **(1 point)** Consider a branch with a taken/not taken pattern 0110011001100…, where 1 indicates taken, and 0 indicates not taken. Using the state transitions discussed in class, write out the states for a 2 bit saturating counter with an initial state of weak taken (10), when it encounters this pattern. What is the steady misprediction rate?
 
-| T/NT |  |  |  |  |  |  |  |  |  |  |  |  |  |
-| :---- | :---- | :---- | :---- | :---- | :---- | :---- | :---- | :---- | :---- | :---- | :---- | :---- | :---- |
-| State |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| T/NT | 0 | 1 | 1 | 0 | 0 | 1 | 1 | 0 | 0 | 1 | 1 |0 | 0  | ... | 
+|-----------|-------|-----------|
+| State   | 10 | 00 | 01 | 11 | 10 | 00 | 01 | 11 | 10 | 00 | 01 | 11 | 10 | 00 |
+
+in the pattern 0110 which has 4/4 predictions wrong
+Therefore it has 100% misprediction rate
 
 2. **(1 point)** Consider the same taken/not taken pattern as the previous question. Give the states a saturating counter using Gem5’s implementation would go through, and provide the steady misprediction rate. Assume the counter starts in the weak taken state (10) as before.
 
-| T/NT |  |  |  |  |  |  |  |  |  |  |  |  |  |
-| :---- | :---- | :---- | :---- | :---- | :---- | :---- | :---- | :---- | :---- | :---- | :---- | :---- | :---- |
-| State |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| T/NT | 0 | 1 | 1 | 0 | 0 | 1 | 1 | 0 | 0 | 1 | 1 |0 | 0  | ... | 
+|-----------|-------|-----------|
+| State   | 10 | 01 | 10 | 11 | 10 | 01 | 10 | 11 | 10 | 01 | 10 | 11 | 10 | 01 |
+
+in the pattern 0110 which has 3/4 predictions wrong
+Therefore it has 75% misprediction rate
 
 3. **(2 points)** Find a taken/not taken pattern that would result in a 100% steady misprediction rate on the Gem5 implementation and  a 50% steady misprediction rate on the version discussed in class. Once again, assume both predictors start in the weak taken (10) state.
 
+	 01010101
+   
 Question 3 **(3 points)**:  
  A (3,2) correlator predictor is a correlator predictor that has a global register with three bits and in which each entry of the PHT has two bits. For a (3,2) correlated prediction scheme that has a global history register and one pattern history table, show the contents of the history register and the PHT after the following sequence of branch executions have taken place:
 
@@ -273,6 +287,20 @@ Assume that:
 * The global history register is initialized to zero.  
 * The addresses of the nine branch instructions are: ffff0000, ffff0001, ffff0010, ffff0000, ffff0000, ffff0000, ffff0011, ffff0010, ffff0000... but do you need this information?  
 * The PHT should be shown as updated after the execution of the last branch.
+
+  	Global History Register = 011
+  	PHT
+  	| Index | Counter |
+|-----------|-------|
+| 000   | 11 |
+| 001   | 11 |
+| 010   | 01 |
+| 011   | 01 |
+| 100   | 11 |
+| 101   | 10 |
+| 110   | 01 |
+| 111   | 10 |
+
 
 **(2 points)** Question 4; Bonus for extra credit (not mandatory):  
 After getting a sense of how prediction correctness varies with changes in the size of the hardware data structures the question that microarchitects usually face, is:
