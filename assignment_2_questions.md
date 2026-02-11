@@ -163,7 +163,7 @@ Question 3\. **(3 points)** How often are branches committed in the provided ben
 	562,027/100,000,001 = 0.562%
 2. **(2 points)** Does this vary between branch predictors? (Ignore extremely small differences due to simulation artifacts.
 
-	No — the percentage of branches committed does not really vary between branch predictors. 
+	No, the percentage of branches committed does not vary between branch predictors. 
 
 # Section 2 (13 points) (branch predictor)
 
@@ -186,12 +186,11 @@ Question 1\. **(7 points)** Gem5  branch predictor questions:
 4. **(1 point)** Let `i` be the number of local counter bits you have. Let `x` (i.e. `010`) be a saturating counter (think of this as an integer). Write a simple `C` expression that returns the prediction of the sat counter. (1 for taken, 0 for not taken)  
    [https://en.cppreference.com/w/c/language/operator\_arithmetic.html](https://en.cppreference.com/w/c/language/operator_arithmetic.html)  
      
-     
+     (x >= (1 << (i - 1)))
      
 5. **(1 point)** Let `2^n` be the number of pht entries. Let PC be the address of the branch. Write a simple C expression(s) that returns the correct number of lower order bits of the PC.   
      
- 
-
+ 	 PC & ((1 << n) - 1)
 
 6. **(1 point)** Let h be the global history, which is `k` bits long. Let `b` be the `n` lower order bits of the PC. Assume `k` is at most `n`. The GShare predictor XOR’s the global history with the upper order bits of `b` to obtain the pht index. Write a simple C expression that calculates the PHT index using `h`, `b`, `n`, and `k`.  
    
