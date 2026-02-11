@@ -252,18 +252,20 @@ The original paper proposing the GShare Branch predictor scheme also specifies t
 
 1. **(1 point)** Consider a branch with a taken/not taken pattern 0110011001100…, where 1 indicates taken, and 0 indicates not taken. Using the state transitions discussed in class, write out the states for a 2 bit saturating counter with an initial state of weak taken (10), when it encounters this pattern. What is the steady misprediction rate?
 
-| T/NT | 0 | 1 | 1 | 0 | 0 | 1 | 1 | 0 | 0 | 1 | 1 |0 | 0  | ... | 
-|-----------|-------|-----------|
-| State   | 10 | 00 | 01 | 11 | 10 | 00 | 01 | 11 | 10 | 00 | 01 | 11 | 10 | 00 |
+| T/NT | 0 | 1 | 1 | 0 | 0 | 1 | 1 | 0 | 0 | 1 | 1 | 0 | 0 | ... |
+|------|---|---|---|---|---|---|---|---|---|---|---|---|---|-----|
+| State|10 |00 |01 |11 |10 |00 |01 |11 |10 |00 |01 |11 |10 |00  |
+
 
 in the pattern 0110 which has 4/4 predictions wrong
 Therefore it has 100% misprediction rate
 
 2. **(1 point)** Consider the same taken/not taken pattern as the previous question. Give the states a saturating counter using Gem5’s implementation would go through, and provide the steady misprediction rate. Assume the counter starts in the weak taken state (10) as before.
 
-| T/NT | 0 | 1 | 1 | 0 | 0 | 1 | 1 | 0 | 0 | 1 | 1 |0 | 0  | ... | 
-|-----------|-------|-----------|
-| State   | 10 | 01 | 10 | 11 | 10 | 01 | 10 | 11 | 10 | 01 | 10 | 11 | 10 | 01 |
+| T/NT | 0 | 1 | 1 | 0 | 0 | 1 | 1 | 0 | 0 | 1 | 1 | 0 | 0 | ... |
+|------|---|---|---|---|---|---|---|---|---|---|---|---|---|-----|
+| State|10 |01 |10 |11 |10 |01 |10 |11 |10 |01 |10 |11 |10 |01  |
+
 
 in the pattern 0110 which has 3/4 predictions wrong
 Therefore it has 75% misprediction rate
@@ -289,9 +291,11 @@ Assume that:
 * The PHT should be shown as updated after the execution of the last branch.
 
   	Global History Register = 011
-  	PHT
-  	| Index | Counter |
-|-----------|-------|
+  
+  	Final PHT:
+
+| Index | Counter |
+|-------|---------|
 | 000   | 11 |
 | 001   | 11 |
 | 010   | 01 |
@@ -300,6 +304,7 @@ Assume that:
 | 101   | 10 |
 | 110   | 01 |
 | 111   | 10 |
+
 
 
 **(2 points)** Question 4; Bonus for extra credit (not mandatory):  
