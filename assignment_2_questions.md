@@ -144,18 +144,25 @@ For MCF + BiModeBP
 3. **(2 points)** Report the misprediction rates for the total forwards and the total backwards both branch prediction strategies.   
 
 	ANS:
-   	 For LBM + LocalBP => Forward -> (940 + 463)/(5149 + 16045) = 0.0662 ~ 6.62% 
+   	 For LBM + LocalBP => Forward -> (940 + 463)/(5149 + 16045) = 0.0662 ~ 6.62%
+   
    						  Backward-> (72 + 162)/(557034 + 2437) = 0.000418 ~ 0.042%
+   
      For LBM + BiModeBP =>Forward -> (18 + 650)/(4148 + 17249) = 0.0312 ~ 3.12%
+   
    						  Backward-> (6 + 418)/(556751 + 2758) = 0.000758 ~ 0.076%
+   
      For MCF + LocalBP => Forward -> (312594 + 708351)/(5021280 + 10975324) = 0.0638 ~ 6.38%
+   
    						  Backward-> (91281 + 94122)/(3866142 + 538945) = 0.0421 ~ 4.21%
+   
      For MCF + BiModeBP =>Forward -> (172477 + 217518)/(5300174 + 10755516) = 0.0243 ~ 2.43%
+   
    						  Backward-> (72708 + 14604)/(3739711 + 531035) = 0.0204 ~ 2.04%
    
      
      
-4. **(2 points)** When considering the accuracy of predicting **forward and backward** branches separately, can you claim that one type was predicted better than the other? What about **predicted taken and not taken**? Can you conclusively conclude whether forwards or backwards branches are better predicted? Provide a hypothesis to explain your results.  
+5. **(2 points)** When considering the accuracy of predicting **forward and backward** branches separately, can you claim that one type was predicted better than the other? What about **predicted taken and not taken**? Can you conclusively conclude whether forwards or backwards branches are better predicted? Provide a hypothesis to explain your results.  
    * In particular, discuss whether or not your results support the idea that backward branches are taken more regularly than forward branches.
 	
 	ANS: Backward branches were predicted better than the forwards branches in all cases. From the table we can notice that backward branches are mostly taken, this is because backward branches are usually 				 for/while loops which are mostly taken whereas the forward branches are more unpredictable.  
